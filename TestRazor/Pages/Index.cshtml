@@ -1,0 +1,79 @@
+﻿@page
+@using System.Globalization
+@model IndexModel
+@{
+    ViewData["Title"] = "Home page";
+    bool firstRecord = true;
+}
+
+<div class="text-center">
+    <form method="post">
+        <div class="mb-3">
+            <label class="form-label">Post Code</label>
+            <Select asp-for="HomeViewModel.Code" asp-items="Model.options" class="form-select">
+                <option selected>Select Postal Code</option>
+            </Select>
+            <span class="text-danger" asp-validation-for="HomeViewModel.Code"></span>
+        </div>
+        <div class="mb-3">
+            <label class="form-label">Annual Income</label>
+            <input type="number" asp-for="HomeViewModel.AnnualIncome" class="form-control" />
+            <span class="text-danger" asp-validation-for="HomeViewModel.AnnualIncome"></span>
+        </div>
+        <div class="mb-3">
+            <button type="submit" class="btn btn-primary">Calculate</button>
+        </div>
+    </form>
+    <div class="mb-3">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>
+                        Postal Code
+                    </th>
+                    <th>
+                        Annual Income
+                    </th>
+                    <th>
+                        Calculated Tax
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach(var item in Model._taxRecords)
+                {
+                    @if (firstRecord)
+                    {
+                        firstRecord = false;
+                        <tr class="fs-1">
+                            <td>
+                                @item.PostalCode.Code
+                            </td>
+                            <td>
+                                @item.AnnualIncome.ToString("N", CultureInfo.InvariantCulture)
+                            </td>
+                            <td>
+                                @item.CalculatedTaxValue.ToString("N", CultureInfo.InvariantCulture)
+                            </td>
+                        </tr>
+                    }
+                    else
+                    {
+                        <tr>
+                            <td>
+                                @item.PostalCode.Code
+                            </td>
+                            <td>
+                                @item.AnnualIncome.ToString("N", CultureInfo.InvariantCulture)
+                            </td>
+                            <td>
+                                @item.CalculatedTaxValue.ToString("N", CultureInfo.InvariantCulture)
+                            </td>
+                        </tr>
+                    }
+                    
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
